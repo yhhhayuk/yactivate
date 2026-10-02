@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07110b">
+  <meta name="description" content="AM — aplikasi Android ringan dengan antarmuka modern dan sederhana.">
+  <title>AM — Aplikasi Android</title>
+
+  <style>
+    :root{
+      --bg:#050806;
+      --surface:#0b120e;
+      --surface-2:#0f1913;
+      --line:rgba(255,255,255,.09);
+      --text:#f2f7f3;
+      --muted:#8f9b93;
+      --green:#62e88a;
+      --green-2:#2fba62;
+      --green-soft:rgba(98,232,138,.12);
+      --shadow:0 25px 80px rgba(0,0,0,.42);
+      --radius:24px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 80% 0%, rgba(70,190,105,.12), transparent 32rem),
+        radial-gradient(circle at 10% 25%, rgba(98,232,138,.06), transparent 28rem),
+        var(--bg);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+    .container{width:min(1120px,calc(100% - 40px));margin:auto}
+
+    .nav{
+      position:sticky;
+      top:0;
+      z-index:50;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      background:rgba(5,8,6,.72);
+      backdrop-filter:blur(18px);
+    }
+    .nav-inner{
+      height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:11px;
+      font-weight:800;
+      letter-spacing:-.03em;
+    }
+    .brand-mark{
+      width:34px;height:34px;border-radius:11px;
+      display:grid;place-items:center;
+      background:linear-gradient(145deg,#183d24,#102418);
+      border:1px solid rgba(98,232,138,.24);
+      box-shadow:0 0 30px rgba(98,232,138,.12);
+    }
+    .brand-mark svg{width:18px;height:18px}
+    .nav-links{display:flex;gap:28px;color:var(--muted);font-size:14px}
+    .nav-links a:hover{color:var(--text)}
+    .nav-download{
+      padding:10px 16px;
+      border-radius:12px;
+      background:var(--green);
+      color:#061008;
+      font-weight:800;
+      font-size:13px;
+    }
+
+    .hero{
+      min-height:720px;
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      align-items:center;
+      gap:60px;
+      padding:90px 0 80px;
+    }
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 11px;
+      border:1px solid rgba(98,232,138,.18);
+      background:var(--green-soft);
+      border-radius:999px;
+      color:#a5f0bb;
+      font-size:12px;
+      font-weight:700;
+    }
+    .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 14px var(--green)}
+    h1{
+      margin:20px 0 18px;
+      font-size:clamp(48px,7vw,82px);
+      line-height:.98;
+      letter-spacing:-.065em;
+      max-width:720px;
+    }
+    .gradient-text{
+      background:linear-gradient(135deg,#fff 20%,#a0efb7 70%,#52d97e);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+    }
+    .hero-copy{
+      max-width:610px;
+      color:var(--muted);
+      font-size:18px;
+    }
+    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:9px;
+      min-height:48px;padding:0 18px;border-radius:14px;
+      border:1px solid var(--line);
+      font-size:14px;font-weight:800;
+      transition:.2s ease;
+    }
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{background:var(--green);color:#061008;border-color:transparent;box-shadow:0 12px 35px rgba(98,232,138,.18)}
+    .btn-secondary{background:rgba(255,255,255,.03);color:var(--text)}
+    .btn svg{width:17px;height:17px}
+
+    .hero-visual{position:relative;display:grid;place-items:center}
+    .glow{
+      position:absolute;width:340px;height:340px;border-radius:50%;
+      background:rgba(74,216,117,.12);filter:blur(65px);
+    }
+    .phone{
+      position:relative;width:min(310px,75vw);aspect-ratio:9/18.7;
+      padding:9px;border-radius:38px;
+      background:#0b0e0c;
+      border:1px solid rgba(255,255,255,.13);
+      box-shadow:var(--shadow),0 0 80px rgba(98,232,138,.10);
+      transform:rotate(2deg);
+    }
+    .phone::before{
+      content:"";position:absolute;top:11px;left:50%;transform:translateX(-50%);
+      width:92px;height:25px;border-radius:20px;background:#020403;z-index:3;
+    }
+    .screen{
+      height:100%;border-radius:30px;overflow:hidden;
+      background:linear-gradient(180deg,#0b120e,#050806);
+      border:1px solid rgba(255,255,255,.05);
+      padding:54px 17px 18px;
+    }
+    .screen-top{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#7f8b83}
+    .screen-title{font-size:22px;font-weight:850;margin-top:30px}
+    .mini-card{
+      margin-top:15px;padding:15px;border:1px solid rgba(98,232,138,.12);
+      background:rgba(98,232,138,.055);border-radius:17px;
+    }
+    .mini-label{font-size:10px;color:#77837b;text-transform:uppercase;letter-spacing:.12em}
+    .mini-value{font-size:16px;font-weight:800;margin-top:4px}
+    .mini-button{
+      margin-top:18px;height:43px;border-radius:13px;background:var(--green);
+      color:#061008;display:grid;place-items:center;font-weight:900;font-size:12px;
+    }
+    .mini-lines{display:grid;gap:8px;margin-top:16px}
+    .mini-line{height:7px;border-radius:99px;background:rgba(255,255,255,.07)}
+    .mini-line:nth-child(2){width:72%}.mini-line:nth-child(3){width:48%}
+
+    section{padding:100px 0}
+    .section-head{max-width:650px;margin-bottom:42px}
+    .kicker{color:#83eaa1;font-size:12px;font-weight:850;letter-spacing:.14em;text-transform:uppercase}
+    h2{font-size:clamp(32px,5vw,52px);line-height:1.05;letter-spacing:-.05em;margin:10px 0 13px}
+    .section-head p{color:var(--muted);margin:0}
+
+    .features{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+    }
+    .feature{
+      padding:25px;border:1px solid var(--line);border-radius:var(--radius);
+      background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.015));
+    }
+    .feature-icon{
+      width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+      background:var(--green-soft);border:1px solid rgba(98,232,138,.15);
+      color:var(--green);
+    }
+    .feature-icon svg{width:20px;height:20px}
+    .feature h3{font-size:17px;margin:19px 0 7px}
+    .feature p{color:var(--muted);font-size:14px;margin:0}
+
+    .download{
+      position:relative;overflow:hidden;
+      border:1px solid rgba(98,232,138,.16);
+      border-radius:32px;padding:52px;
+      background:
+        radial-gradient(circle at 85% 15%,rgba(98,232,138,.14),transparent 23rem),
+        linear-gradient(145deg,#0c1710,#080d09);
+    }
+    .download-grid{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center}
+    .download h2{max-width:650px}
+    .download p{color:var(--muted);max-width:650px}
+    .download-meta{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px}
+    .meta{font-size:12px;color:#aab4ad;padding:7px 10px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.025)}
+
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .step{padding:25px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.02)}
+    .number{font-size:12px;color:var(--green);font-weight:900}
+    .step h3{margin:13px 0 6px}.step p{margin:0;color:var(--muted);font-size:14px}
+
+    .faq{max-width:800px}
+    details{border-top:1px solid var(--line);padding:19px 0}
+    details:last-child{border-bottom:1px solid var(--line)}
+    summary{cursor:pointer;font-weight:750}
+    details p{color:var(--muted);font-size:14px;max-width:700px}
+
+    footer{padding:35px 0 50px;border-top:1px solid var(--line);color:#758078;font-size:13px}
+    .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+    .footer-links{display:flex;gap:20px}
+    .footer-links a:hover{color:var(--text)}
+
+    @media(max-width:850px){
+      .nav-links{display:none}
+      .hero{grid-template-columns:1fr;min-height:auto;padding-top:65px}
+      .hero-visual{order:-1}
+      .phone{width:245px}
+      .features,.steps{grid-template-columns:1fr}
+      .download-grid{grid-template-columns:1fr}
+      .download{padding:32px 24px}
+    }
+    @media(max-width:520px){
+      .container{width:min(100% - 28px,1120px)}
+      .nav-download{padding:9px 12px}
+      h1{font-size:52px}
+      .hero-copy{font-size:16px}
+      section{padding:75px 0}
+      .actions .btn{width:100%}
+    }
+  </style>
+</head>
+
+<body>
+  <!--
+    GANTI 2 LINK INI:
+    1. APP_DOWNLOAD_URL = file APK di repository / GitHub Pages
+    2. GITHUB_URL = repository GitHub kamu
+  -->
+  <script>
+    const APP_DOWNLOAD_URL = "./app-release.apk";
+    const GITHUB_URL = "https://github.com/USERNAME/REPOSITORY";
+  </script>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/>
+            <path d="M8.5 12h7M12 8.5v7"/>
+          </svg>
+        </span>
+        <span>AM</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#features">Fitur</a>
+        <a href="#download">Download</a>
+        <a href="#faq">FAQ</a>
+      </div>
+
+      <a class="nav-download" href="./app-release.apk">Download APK</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="container hero">
+      <div>
+        <span class="eyebrow"><span class="dot"></span> Android application</span>
+        <h1>Simple app.<br><span class="gradient-text">Clean experience.</span></h1>
+        <p class="hero-copy">
+          Aplikasi Android berbasis Flutter dengan tampilan gelap yang ringan,
+          modern, dan fokus pada pengalaman penggunaan yang sederhana.
+        </p>
+
+        <div class="actions">
+          <a class="btn btn-primary" href="./app-release.apk">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 20h14"/>
+            </svg>
+            Download APK
+          </a>
+          <a class="btn btn-secondary" id="githubHero" href="#" target="_blank" rel="noopener">
+            View on GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-label="App preview">
+        <div class="glow"></div>
+        <div class="phone">
+          <div class="screen">
+            <div class="screen-top">
+              <span>AM</span>
+              <span>10:13</span>
+            </div>
+            <div class="screen-title">Welcome back.</div>
+            <div class="mini-card">
+              <div class="mini-label">Application</div>
+              <div class="mini-value">Ready to use</div>
+              <div class="mini-lines">
+                <div class="mini-line"></div>
+                <div class="mini-line"></div>
+                <div class="mini-line"></div>
+              </div>
+              <div class="mini-button">CONTINUE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="container">
+        <div class="section-head">
+          <div class="kicker">Why AM</div>
+          <h2>Dibuat untuk penggunaan yang cepat dan simpel.</h2>
+          <p>Beberapa hal yang menjadi fokus utama aplikasi.</p>
+        </div>
+
+        <div class="features">
+          <article class="feature">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/>
+              </svg>
+            </div>
+            <h3>Ringan</h3>
+            <p>Dibangun dengan Flutter sehingga antarmuka terasa responsif tanpa membawa UI yang berlebihan.</p>
+          </article>
+
+          <article class="feature">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="5" y="2.5" width="14" height="19" rx="3"/>
+                <path d="M9 18h6"/>
+              </svg>
+            </div>
+            <h3>Mobile-first</h3>
+            <p>Layout dirancang khusus untuk layar Android dengan kontrol yang mudah dijangkau.</p>
+          </article>
+
+          <article class="feature">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 3l8 4v5c0 4.8-3.2 7.7-8 9-4.8-1.3-8-4.2-8-9V7l8-4z"/>
+                <path d="M8.5 12l2.2 2.2 4.8-5"/>
+              </svg>
+            </div>
+            <h3>Simple & clean</h3>
+            <p>Visual yang minim distraksi dengan hierarchy yang jelas dan navigasi yang mudah dipahami.</p>
+          </article>
+
+          <article class="feature">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 4v16M4 12h16"/>
+              </svg>
+            </div>
+            <h3>Praktis</h3>
+            <p>Download APK langsung dari halaman ini tanpa harus mencari file di banyak tempat.</p>
+          </article>
+
+          <article class="feature">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 4h14v16H5z"/>
+                <path d="M8 8h8M8 12h8M8 16h5"/>
+              </svg>
+            </div>
+            <h3>Open source page</h3>
+            <p>Source website dapat dilihat dan diunduh langsung dari repository GitHub.</p>
+          </article>
+
+          <article class="feature">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 12a8 8 0 0 1 14.5-4.7L21 10"/>
+                <path d="M21 4v6h-6"/>
+                <path d="M20 12a8 8 0 0 1-14.5 4.7L3 14"/>
+                <path d="M3 20v-6h6"/>
+              </svg>
+            </div>
+            <h3>Mudah diperbarui</h3>
+            <p>Rilis baru bisa dipublikasikan dengan mengganti APK di repository atau GitHub Releases.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="download">
+      <div class="container">
+        <div class="download">
+          <div class="download-grid">
+            <div>
+              <div class="kicker">Get the app</div>
+              <h2>Siap mencoba aplikasinya?</h2>
+              <p>
+                Download APK dari repository resmi dan install langsung di perangkat Android kamu.
+              </p>
+              <div class="download-meta">
+                <span class="meta">Android</span>
+                <span class="meta">Flutter</span>
+                <span class="meta">APK Release</span>
+              </div>
+            </div>
+            <div class="actions">
+              <a class="btn btn-primary" href="./app-release.apk">Download APK</a>
+              <a class="btn btn-secondary" id="githubDownload" href="#" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head">
+          <div class="kicker">How to install</div>
+          <h2>Tiga langkah sederhana.</h2>
+        </div>
+
+        <div class="steps">
+          <article class="step">
+            <div class="number">01 / DOWNLOAD</div>
+            <h3>Ambil APK</h3>
+            <p>Tekan tombol Download APK di halaman ini.</p>
+          </article>
+          <article class="step">
+            <div class="number">02 / INSTALL</div>
+            <h3>Install</h3>
+            <p>Buka file APK dan ikuti proses instalasi Android.</p>
+          </article>
+          <article class="step">
+            <div class="number">03 / OPEN</div>
+            <h3>Jalankan</h3>
+            <p>Buka aplikasi dan mulai menggunakan fiturnya.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="section-head">
+          <div class="kicker">FAQ</div>
+          <h2>Pertanyaan umum.</h2>
+        </div>
+
+        <div class="faq">
+          <details>
+            <summary>Di mana source code website ini?</summary>
+            <p>Source code website tersedia di repository GitHub yang ditautkan pada tombol GitHub.</p>
+          </details>
+          <details>
+            <summary>Di mana file APK-nya?</summary>
+            <p>Secara default halaman ini mencari file bernama <strong>app-release.apk</strong> di folder yang sama dengan index.html.</p>
+          </details>
+          <details>
+            <summary>Apakah website ini membutuhkan framework?</summary>
+            <p>Tidak. Halaman ini dibuat sebagai satu file HTML dengan CSS dan JavaScript sederhana sehingga mudah dipublish ke GitHub Pages.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>© 2026 AM. Built with Flutter.</div>
+      <div class="footer-links">
+        <a id="githubFooter" href="#" target="_blank" rel="noopener">GitHub</a>
+        <a href="#download">Download</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("githubHero").href = GITHUB_URL;
+    document.getElementById("githubDownload").href = GITHUB_URL;
+    document.getElementById("githubFooter").href = GITHUB_URL;
+
+    // Semua tombol APK memakai path yang sama.
+    document.querySelectorAll('a[href="./app-release.apk"]')
+      .forEach(a => a.href = APP_DOWNLOAD_URL);
+  </script>
+</body>
+</html>
